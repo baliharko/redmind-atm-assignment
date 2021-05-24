@@ -17,10 +17,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureDataMongo
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class BillControllerTest {
+class AtmControllerTest {
 
     @Autowired
-    private BillController billController;
+    private AtmController atmController;
 
     @Autowired
     private MockMvc mockMvc;

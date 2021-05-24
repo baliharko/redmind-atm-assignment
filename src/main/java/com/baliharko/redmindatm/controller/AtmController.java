@@ -1,7 +1,7 @@
 package com.baliharko.redmindatm.controller;
 
 import com.baliharko.redmindatm.model.Bill;
-import com.baliharko.redmindatm.service.BillService;
+import com.baliharko.redmindatm.service.AtmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,22 +10,22 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/atm")
-public class BillController {
+public class AtmController {
 
-    private final BillService billService;
+    private final AtmService atmService;
 
     @GetMapping("/all")
     public List<Bill> getAllBills() {
-        return billService.getAllBills();
+        return atmService.getAllBills();
     }
 
     @GetMapping("/withdraw/{amount}")
     public List<Bill> withdrawBills(@PathVariable double amount) {
-        return billService.withdrawBills(amount);
+        return atmService.withdrawBills(amount);
     }
 
     @GetMapping("/balance")
     public String getCurrentBalance() {
-        return "" + billService.getTotalBalance();
+        return "" + atmService.getTotalBalance();
     }
 }

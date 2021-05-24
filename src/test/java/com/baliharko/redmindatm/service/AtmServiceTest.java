@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class BillServiceTest {
+public class AtmServiceTest {
 
-    public BillService billService;
+    public AtmService atmService;
 
     @Mock
     public BillRepository mockRepository;
@@ -28,7 +28,7 @@ public class BillServiceTest {
 
     @BeforeEach
     public void initTests() {
-        billService = new BillService(mockRepository);
+        atmService = new AtmService(mockRepository);
         testBills = Arrays.asList(
                 new Bill(1000),
                 new Bill(1000),
@@ -46,7 +46,7 @@ public class BillServiceTest {
     @Test
     public void getAllBillsTest() {
         when(mockRepository.findAll()).thenReturn(testBills);
-        assertEquals(testBills, billService.getAllBills());
+        assertEquals(testBills, atmService.getAllBills());
     }
 
     @Test
@@ -54,7 +54,7 @@ public class BillServiceTest {
         when(mockRepository.findAll()).thenReturn(testBills);
 
         List<Integer> expected = Arrays.asList(1000, 500, 100);
-        List<Integer> actual = billService.getBillDenominations();
+        List<Integer> actual = atmService.getBillDenominations();
 
         assertEquals(expected, actual);
         assertNotEquals(Arrays.asList(1000, 100), actual);
@@ -75,7 +75,7 @@ public class BillServiceTest {
 
         assertEquals(
                 Arrays.asList(new Bill(1000), new Bill(1000)),
-                billService.withdrawBills(2000)
+                atmService.withdrawBills(2000)
         );
 
         when(mockRepository.findAll()).thenReturn(Arrays.asList(
@@ -96,7 +96,7 @@ public class BillServiceTest {
                         new Bill(100),
                         new Bill(100),
                         new Bill(100)
-                ), billService.withdrawBills(900)
+                ), atmService.withdrawBills(900)
         );
 
         when(mockRepository.findAll()).thenReturn(Arrays.asList(
@@ -110,7 +110,7 @@ public class BillServiceTest {
                         new Bill(500),
                         new Bill(500),
                         new Bill(100)
-                ), billService.withdrawBills(1100)
+                ), atmService.withdrawBills(1100)
         );
 
         verify(mockRepository, times(6)).findAll();
@@ -127,11 +127,11 @@ public class BillServiceTest {
     @Test
     public void getTotalBalanceTest() {
         when(mockRepository.findAll()).thenReturn(testBills);
-        assertEquals(4000, billService.getTotalBalance());
+        assertEquals(4000, atmService.getTotalBalance());
 
         when(mockRepository.findAll()).thenReturn(
                 Arrays.asList(new Bill(100), new Bill(500)));
-        assertEquals(600, billService.getTotalBalance());
+        assertEquals(600, atmService.getTotalBalance());
     }
 
     @Test
@@ -140,9 +140,9 @@ public class BillServiceTest {
         when(mockRepository.countBillsByValue(500)).thenReturn(3);
         when(mockRepository.countBillsByValue(100)).thenReturn(5);
 
-        assertEquals(2, billService.getBillQuantity(1000));
-        assertEquals(3, billService.getBillQuantity(500));
-        assertEquals(5, billService.getBillQuantity(100));
+        assertEquals(2, atmService.getBillQuantity(1000));
+        assertEquals(3, atmService.getBillQuantity(500));
+        assertEquals(5, atmService.getBillQuantity(100));
 
         verify(mockRepository, times(3)).countBillsByValue(anyInt());
     }
@@ -151,7 +151,7 @@ public class BillServiceTest {
     @DisplayName("withdrawBills - throw error if insufficient funds")
     public void getBillsInsufficientFundsErrorTest() {
         when(mockRepository.findAll()).thenReturn(testBills);
-        assertThrows(ResponseStatusException.class, () -> billService.withdrawBills(9000));
+        assertThrows(ResponseStatusException.class, () -> atmService.withdrawBills(9000));
 
         verify(mockRepository).findAll();
     }
@@ -168,7 +168,7 @@ public class BillServiceTest {
         when(mockRepository.removeBillByValue(100))
                 .thenReturn(new Bill(100), new Bill(100), new Bill(100), new Bill(100), new Bill(100), null);
 
-        assertDoesNotThrow(() -> billService.withdrawBills(3600));
-        assertThrows(ResponseStatusException.class, () -> billService.withdrawBills(500));
+        assertDoesNotThrow(() -> atmService.withdrawBills(3600));
+        assertThrows(ResponseStatusException.class, () -> atmService.withdrawBills(500));
     }
 }
