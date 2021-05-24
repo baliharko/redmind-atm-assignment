@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - /data/db
+    restart: always
+
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - mongo
+    ports:
+      - 8081:8081
+    restart: always
